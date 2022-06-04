@@ -4,7 +4,10 @@ go 1.18
 
 require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/hekmon/cunits/v2 v2.1.0 // indirect
+	github.com/hekmon/transmissionrpc/v2 v2.0.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
