@@ -58,7 +58,7 @@ func run() int {
 	seenError := false
 	for _, torrent := range torrents {
 		if torrent.ErrorString != nil && *torrent.ErrorString != "" {
-			fmt.Printf("torrent hash=%q, error=%q", *torrent.HashString, *torrent.ErrorString)
+			fmt.Printf("torrent hash=%q, error=%q\n", *torrent.HashString, *torrent.ErrorString)
 			seenError = true
 		}
 	}
