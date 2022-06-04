@@ -145,7 +145,7 @@ fmt:
 	$(GO) fmt ./...
 
 run:
-	$(GO) run $(LDFLAGS) .
+	$(GO) run $(LDFLAGS) $(MAIN_PACKAGE)
 
 install:
 	$(GO) install $(LDFLAGS_NATIVE) .

@@ -26,9 +26,12 @@ func run() int {
 
 	viper.SetConfigType("yaml")
 	viper.SetConfigFile(*configFilename)
+	setDefaults(viper.GetViper())
+
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("unable to read config file: %s", err)
 	}
+
 
 	return 0
 }
