@@ -35,6 +35,8 @@ notify:
     - /home/user/.config/transmission-notify.sh
 ```
 
+Please consult [source](cmd/transmission-monitor/defaults.go) for all available configuration options.
+
 #### /home/user/.config/transmission-notify.sh
 
 ```bash
