@@ -51,7 +51,7 @@ mailx -v \
 -S smtp-auth=login \
 -S smtp-auth-user="sender@example.com" \
 -S smtp-auth-password="mailpassword" \
-recepient@example.com
+recipient@example.com
 ```
 
 Make sure to run `transmission-monitor` command every few minutes with scheduler of your choice.
