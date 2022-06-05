@@ -13,6 +13,10 @@ func NewLogNotifier() LogNotifier {
 }
 
 func (_ LogNotifier) Notify(t *transmissionrpc.Torrent, reason error) error {
-	log.Printf("torrent error: hash=%s error: %v", *t.HashString, reason)
+	hash := ""
+	if t.HashString != nil {
+		hash = *t.HashString
+	}
+	log.Printf("torrent error: hash=%s error: %v", hash, reason)
 	return nil
 }
