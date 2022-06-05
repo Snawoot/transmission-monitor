@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hekmon/transmissionrpc/v2"
 	"github.com/hashicorp/go-multierror"
+	"github.com/hekmon/transmissionrpc/v2"
 )
 
 type Checker interface {
@@ -30,8 +30,8 @@ type Monitor struct {
 }
 
 type MonitorRecord struct {
-	When time.Time `json:"when"`
-	Reason string `json:"reason,omitempty"`
+	When    time.Time                `json:"when"`
+	Reason  string                   `json:"reason,omitempty"`
 	Torrent *transmissionrpc.Torrent `json:"torrent,omitempty"`
 }
 
@@ -90,8 +90,8 @@ func (m *Monitor) Process(torrents []*transmissionrpc.Torrent) (res error) {
 
 func (m *Monitor) saveRecord(t *transmissionrpc.Torrent, reason error) error {
 	record := &MonitorRecord{
-		When: time.Now().UTC().Truncate(0),
-		Reason: reason.Error(),
+		When:    time.Now().UTC().Truncate(0),
+		Reason:  reason.Error(),
 		Torrent: t,
 	}
 	b, err := json.Marshal(record)
