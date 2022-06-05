@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/hekmon/transmissionrpc/v2"
 	"github.com/spf13/viper"
@@ -19,7 +20,8 @@ import (
 var version = "undefined"
 
 var (
-	configFilename = flag.String("conf", "transmission-monitor.yaml", "path to configuration file")
+	home, _        = os.UserHomeDir()
+	configFilename = flag.String("conf", filepath.Join(home, ".config", "transmission-monitor.yaml"), "path to configuration file")
 	showVersion    = flag.Bool("version", false, "show program version and exit")
 	clearDB        = flag.Bool("clear-db", false, "clear database")
 	clearKey       = flag.String("clear-key", "", "delete specified hash from database")
