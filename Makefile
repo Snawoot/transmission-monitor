@@ -148,7 +148,7 @@ run:
 	$(GO) run $(LDFLAGS) $(MAIN_PACKAGE)
 
 install:
-	$(GO) install $(LDFLAGS_NATIVE) .
+	$(GO) install $(LDFLAGS_NATIVE) $(MAIN_PACKAGE)
 
 .PHONY: clean all native fmt install \
 	bin-native \
