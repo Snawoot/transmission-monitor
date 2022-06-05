@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -18,4 +20,7 @@ func setDefaults(d defaulter) {
 	d.SetDefault("rpc.httptimeout", time.Duration(0))
 	d.SetDefault("rpc.useragent", "transmission-monitor/"+version)
 	d.SetDefault("rpc.debug", false)
+	home, _ := os.UserHomeDir()
+	defDBPath := filepath.Join(home, ".transmission-monitor", "db")
+	d.SetDefault("db.path", defDBPath)
 }
