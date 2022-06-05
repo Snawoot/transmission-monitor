@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/Snawoot/transmission-monitor/db"
+	"github.com/Snawoot/transmission-monitor/health"
 )
 
 var version = "undefined"
@@ -82,8 +83,8 @@ func run() int {
 
 	seenError := false
 	for _, torrent := range torrents {
-		if torrent.ErrorString != nil && *torrent.ErrorString != "" {
-			fmt.Printf("torrent hash=%q, error=%q\n", *torrent.HashString, *torrent.ErrorString)
+		if err := health.CheckTorrent(&torrent); err != nil {
+			fmt.Printf("torrent hash=%q, error: %s\n", *torrent.HashString, err)
 			seenError = true
 		}
 	}
