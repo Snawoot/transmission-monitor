@@ -115,5 +115,6 @@ func ensureDir(path string) {
 
 func main() {
 	log.Default().SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
+	log.Default().SetPrefix("TRANSMISSION-MONITOR: ")
 	os.Exit(run())
 }
