@@ -23,4 +23,6 @@ func setDefaults(d defaulter) {
 	home, _ := os.UserHomeDir()
 	defDBPath := filepath.Join(home, ".transmission-monitor", "db")
 	d.SetDefault("db.path", defDBPath)
+	d.SetDefault("notify.command", []string{})
+	d.SetDefault("notify.timeout", 30*time.Second)
 }

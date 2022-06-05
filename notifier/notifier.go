@@ -73,6 +73,7 @@ func (n *CommandNotifier) Notify(t *transmissionrpc.Torrent, reason error) error
 	}); err != nil {
 		return fmt.Errorf("unable to export record: %w", err)
 	}
+	pipe.Close()
 
 	if err := subprocess.Wait(); err != nil {
 		return fmt.Errorf("subprocess error: %w", err)

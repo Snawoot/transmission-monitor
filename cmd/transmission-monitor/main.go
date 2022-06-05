@@ -89,8 +89,15 @@ func run() int {
 	}
 
 	checker := health.NewErrorCheck()
-	var notifier monitor.Notifier = notifier.NewLogNotifier()
-	mon := monitor.NewMonitor(dbInstance, checker, notifier)
+	var notify monitor.Notifier = notifier.NewLogNotifier()
+	notifyCmd := viper.GetStringSlice("notify.command")
+	if len(notifyCmd) != 0 {
+		notify = notifier.NewCommandNotifier(
+			viper.GetDuration("notify.timeout"),
+			notifyCmd,
+		)
+	}
+	mon := monitor.NewMonitor(dbInstance, checker, notify)
 	if err := mon.Process(t); err != nil {
 		log.Fatalf("monitor returned error: %v", err)
 	}
