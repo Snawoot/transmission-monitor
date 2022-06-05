@@ -69,6 +69,7 @@ func run() int {
 		return 0
 
 	}
+
 	if *clearDB {
 		err := dbInstance.Clear()
 		if err != nil {
