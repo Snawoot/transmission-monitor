@@ -4,7 +4,7 @@ Tool to track Transmission torrents state. Intended to be run as a cron job each
 
 For each faulty torrent external command gets fed with JSON describing the problem and the torrent. If command succeeds (zero exit code), notification delivery is considered successful and will not repeated again. Otherwise notification delivery will be retried on next run. You may clear entire database or remove single key.
 
-Remote RPC must be enable in Transmission for this program to work.
+Remote RPC must be enabled in Transmission for this program to work.
 
 ## Installation
 
