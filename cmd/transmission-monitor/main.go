@@ -17,7 +17,6 @@ import (
 	"github.com/Snawoot/transmission-monitor/notifier"
 )
 
-
 var (
 	home, _ = os.UserHomeDir()
 	version = "undefined"
@@ -26,9 +25,9 @@ var (
 func run() int {
 	fs := flag.NewFlagSet("transmission-monitor", flag.ExitOnError)
 	configFilename := fs.String("conf", filepath.Join(home, ".config", "transmission-monitor.yaml"), "path to configuration file")
-	showVersion    := fs.Bool("version", false, "show program version and exit")
-	clearDB        := fs.Bool("clear-db", false, "clear database")
-	clearKey       := fs.String("clear-key", "", "delete specified hash from database")
+	showVersion := fs.Bool("version", false, "show program version and exit")
+	clearDB := fs.Bool("clear-db", false, "clear database")
+	clearKey := fs.String("clear-key", "", "delete specified hash from database")
 	fs.Parse(os.Args[1:])
 
 	if *showVersion {
