@@ -7,10 +7,6 @@ import (
 	"github.com/dgraph-io/badger/v3"
 )
 
-var (
-	ErrKeyNotFound = badger.ErrKeyNotFound
-)
-
 type DB struct {
 	db *badger.DB
 }
@@ -47,7 +43,7 @@ func (d *DB) Get(key string) (b []byte, err error) {
 		return nil
 	}); err != nil {
 		if errors.Is(err, badger.ErrKeyNotFound) {
-			return nil, ErrKeyNotFound
+			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to get key %q: %w", key, err)
 	}

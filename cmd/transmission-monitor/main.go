@@ -12,6 +12,8 @@ import (
 
 	"github.com/Snawoot/transmission-monitor/db"
 	"github.com/Snawoot/transmission-monitor/health"
+	"github.com/Snawoot/transmission-monitor/monitor"
+	"github.com/Snawoot/transmission-monitor/notifier"
 )
 
 var version = "undefined"
@@ -81,16 +83,16 @@ func run() int {
 		log.Fatalf("unable to get torrents: %v", err)
 	}
 
-	seenError := false
-	for _, torrent := range torrents {
-		if err := health.CheckTorrent(&torrent); err != nil {
-			fmt.Printf("torrent hash=%q, error: %s\n", *torrent.HashString, err)
-			seenError = true
-		}
+	t := make([]*transmissionrpc.Torrent, len(torrents))
+	for i := range torrents {
+		t[i] = &torrents[i]
 	}
 
-	if seenError {
-		return 3
+	checker := health.NewErrorCheck()
+	var notifier monitor.Notifier = notifier.NewLogNotifier()
+	mon := monitor.NewMonitor(dbInstance, checker, notifier)
+	if err := mon.Process(t); err != nil {
+		log.Fatalf("monitor returned error: %v", err)
 	}
 
 	return 0

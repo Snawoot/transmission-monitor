@@ -43,7 +43,13 @@ func newTorrentError(code *int64, msg *string) *TorrentError {
 	}
 }
 
-func CheckTorrent(t *transmissionrpc.Torrent) error {
+type ErrorCheck struct{}
+
+func NewErrorCheck() ErrorCheck {
+	return ErrorCheck{}
+}
+
+func (_ ErrorCheck) CheckTorrent(t *transmissionrpc.Torrent) error {
 	if t == nil {
 		return NilTorrent
 	}
