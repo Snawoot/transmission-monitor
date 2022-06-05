@@ -54,7 +54,38 @@ mailx -v \
 recipient@example.com
 ```
 
-Make sure to run `transmission-monitor` command every few minutes with scheduler of your choice.
+Make sure to run `transmission-monitor` command every few minutes with scheduler of your choice. Example for systemd timer and service:
+
+```
+$ systemctl --user cat transmission-monitor.service transmission-monitor.timer
+# /home/user/.config/systemd/user/transmission-monitor.service
+[Unit]
+Description=Transmission torrent state monitor
+Wants=transmission-monitor.timer
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/user/go/bin/transmission-monitor
+TimeoutStartSec=3 min
+
+[Install]
+WantedBy=multi-user.target
+
+# /home/user/.config/systemd/user/transmission-monitor.timer
+[Unit]
+Description=transmission-monitor periodic job
+RefuseManualStart=no
+RefuseManualStop=no
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
 
 ## Synopsis
 
