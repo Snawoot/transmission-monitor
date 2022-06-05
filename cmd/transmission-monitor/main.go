@@ -18,6 +18,8 @@ var version = "undefined"
 var (
 	configFilename = flag.String("conf", "transmission-monitor.yaml", "path to configuration file")
 	showVersion    = flag.Bool("version", false, "show program version and exit")
+	clearDB        = flag.Bool("clear-db", false, "clear database")
+	clearKey       = flag.String("clear-key", "", "delete specified hash from database")
 )
 
 func run() int {
@@ -33,6 +35,27 @@ func run() int {
 	setDefaults(viper.GetViper())
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("unable to read config file: %s", err)
+	}
+
+	dbPath := viper.GetString("db.path")
+	ensureDir(dbPath)
+	dbInstance, err := db.Open(dbPath)
+	defer dbInstance.Close()
+
+	if *clearDB {
+		err := dbInstance.Clear()
+		if err != nil {
+			log.Fatalf("failed to clear database: %v", err)
+		}
+		return 0
+	}
+
+	if *clearKey != "" {
+		err := dbInstance.Delete(*clearKey)
+		if err != nil {
+			log.Fatalf("failed to remove key from database: %v", err)
+		}
+		return 0
 	}
 
 	trpc, err := transmissionrpc.New(
@@ -51,11 +74,6 @@ func run() int {
 	if err != nil {
 		log.Fatalf("unable to construct transmission RPC client: %v", err)
 	}
-
-	dbPath := viper.GetString("db.path")
-	ensureDir(dbPath)
-	dbInstance, err := db.Open(dbPath)
-	defer dbInstance.Close()
 
 	torrents, err := trpc.TorrentGetAll(context.Background())
 	if err != nil {

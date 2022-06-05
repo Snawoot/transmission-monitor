@@ -1,9 +1,14 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/dgraph-io/badger/v3"
+)
+
+var (
+	ErrKeyNotFound = badger.ErrKeyNotFound
 )
 
 type DB struct {
@@ -22,4 +27,49 @@ func Open(path string) (*DB, error) {
 
 func (d *DB) Close() error {
 	return d.db.Close()
+}
+
+func (d *DB) Clear() error {
+	return d.db.DropAll()
+}
+
+func (d *DB) Get(key string) (b []byte, err error) {
+	if err := d.db.View(func(txn *badger.Txn) error {
+		item, err := txn.Get([]byte(key))
+		if err != nil {
+			return err
+		}
+		if val, err := item.ValueCopy(nil); err != nil {
+			return err
+		} else {
+			b = val
+		}
+		return nil
+	}); err != nil {
+		if errors.Is(err, badger.ErrKeyNotFound) {
+			return nil, ErrKeyNotFound
+		}
+		return nil, fmt.Errorf("failed to get key %q: %w", key, err)
+	}
+	return
+}
+
+func (d *DB) Set(key string, value []byte) error {
+	err := d.db.Update(func(txn *badger.Txn) error {
+		return txn.Set([]byte(key), value)
+	})
+	if err != nil {
+		return fmt.Errorf("failed to set key %q: %w", key, err)
+	}
+	return nil
+}
+
+func (d *DB) Delete(key string) error {
+	err := d.db.Update(func(txn *badger.Txn) error {
+		return txn.Delete([]byte(key))
+	})
+	if err != nil {
+		return fmt.Errorf("failed to delete key %q: %w", key, err)
+	}
+	return nil
 }
