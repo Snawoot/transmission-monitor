@@ -28,6 +28,8 @@ func run() int {
 	showVersion := fs.Bool("version", false, "show program version and exit")
 	clearDB := fs.Bool("clear-db", false, "clear database")
 	clearKey := fs.String("clear-key", "", "delete specified hash from database")
+	listKeys := fs.Bool("list-keys", false, "list keys in database")
+	getKey := fs.String("get-key", "", "dump key content from database")
 	fs.Parse(os.Args[1:])
 
 	if *showVersion {
@@ -47,6 +49,26 @@ func run() int {
 	dbInstance, err := db.Open(dbPath)
 	defer dbInstance.Close()
 
+	if *getKey != "" {
+		data, err := dbInstance.Get(*getKey)
+		if err != nil {
+			log.Fatalf("failed to get key %q: %v", *getKey, err)
+		}
+		os.Stdout.Write(data)
+		return 0
+	}
+
+	if *listKeys {
+		keys, err := dbInstance.ListKeys()
+		if err != nil {
+			log.Fatalf("failed to list keys: %v", err)
+		}
+		for _, key := range keys {
+			fmt.Println(key)
+		}
+		return 0
+
+	}
 	if *clearDB {
 		err := dbInstance.Clear()
 		if err != nil {

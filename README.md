@@ -100,6 +100,10 @@ Usage of transmission-monitor:
     	delete specified hash from database
   -conf string
     	path to configuration file (default "/home/user/.config/transmission-monitor.yaml")
+  -get-key string
+    	dump key content from database
+  -list-keys
+    	list keys in database
   -version
     	show program version and exit
 ```

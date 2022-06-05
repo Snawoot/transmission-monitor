@@ -69,3 +69,20 @@ func (d *DB) Delete(key string) error {
 	}
 	return nil
 }
+
+func (d *DB) ListKeys() (res []string, err error) {
+	if err := d.db.View(func(txn *badger.Txn) error {
+		opt := badger.DefaultIteratorOptions
+		opt.PrefetchSize = 100
+		it := txn.NewIterator(opt)
+		defer it.Close()
+		for it.Rewind(); it.Valid(); it.Next() {
+			keyBytes := it.Item().Key()
+			res = append(res, string(keyBytes))
+		}
+		return nil
+	}); err != nil {
+		return nil, fmt.Errorf("key listing failed: %w", err)
+	}
+	return
+}
