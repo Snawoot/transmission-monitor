@@ -113,7 +113,7 @@ func run() int {
 		t[i] = &torrents[i]
 	}
 
-	checker := health.NewErrorCheck()
+	checker := health.NewErrorCheck(viper.GetBool("notify.skip_no_response"))
 	var notify monitor.Notifier = notifier.NewLogNotifier()
 	notifyCmd := viper.GetStringSlice("notify.command")
 	if len(notifyCmd) != 0 {

@@ -3,6 +3,7 @@ package health
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/hekmon/transmissionrpc/v2"
 )
@@ -43,17 +44,27 @@ func newTorrentError(code *int64, msg *string) *TorrentError {
 	}
 }
 
-type ErrorCheck struct{}
-
-func NewErrorCheck() ErrorCheck {
-	return ErrorCheck{}
+type ErrorCheck struct {
+	skip_no_response bool
 }
 
-func (_ ErrorCheck) CheckTorrent(t *transmissionrpc.Torrent) error {
+func NewErrorCheck(skip_no_response bool) *ErrorCheck {
+	return &ErrorCheck{
+		skip_no_response: skip_no_response,
+	}
+}
+
+func (c *ErrorCheck) CheckTorrent(t *transmissionrpc.Torrent) error {
 	if t == nil {
 		return NilTorrent
 	}
 	if t.ErrorString != nil && *t.ErrorString != "" || t.Error != nil && *t.Error != 0 {
+		if c.skip_no_response &&
+			t.ErrorString != nil &&
+			(strings.Contains(*t.ErrorString, "No Response") ||
+				strings.Contains(*t.ErrorString, "HTTP 0")) {
+			return nil
+		}
 		return newTorrentError(t.Error, t.ErrorString)
 	}
 	return nil

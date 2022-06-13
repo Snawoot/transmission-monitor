@@ -23,4 +23,5 @@ func setDefaults(d defaulter) {
 	d.SetDefault("db.path", defDBPath)
 	d.SetDefault("notify.command", []string{})
 	d.SetDefault("notify.timeout", 30*time.Second)
+	d.SetDefault("notify.skip_no_response", true)
 }
